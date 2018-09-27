@@ -1,0 +1,7 @@
+{
+	"suites": "index.spec.js",
+	"environments": "node",
+	"coverage": [
+		"index.js"
+	]
+}

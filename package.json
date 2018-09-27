@@ -1,0 +1,32 @@
+{
+  "name": "@sporkbytes/money",
+  "version": "1.0.0",
+  "description": "A Money datatype to properly handle calculations and avoid floating point errors.",
+  "main": "index.js",
+  "scripts": {
+    "docs": "jsdoc index.js -d ./docs",
+    "test": "intern"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sporkbytes/Money.git"
+  },
+  "keywords": [
+    "money",
+    "currency",
+    "floating",
+    "point"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sporkbytes/Money/issues"
+  },
+  "homepage": "https://github.com/sporkbytes/Money#readme",
+  "devDependencies": {
+    "intern": "^4.3.1",
+    "jsdoc": "^3.5.5"
+  },
+  "dependencies": {
+    "@sporkbytes/math-utils": "^1.0.0"
+  }
+}
