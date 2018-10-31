@@ -20,7 +20,7 @@ describe('Money', () => {
 		});
 
 		it('should throw an error if the value passed to the constructor could not be parsed as a floating point number', () => {
-			expect(() => new Money('randomString')).to.throw('Your amount could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.');
+			expect(() => new Money('randomString')).to.throw('Your amount randomString could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.');
 		});
 	});
 
@@ -55,7 +55,11 @@ describe('Money', () => {
 		});
 
 		it('should retain the full, non-rounded amount accessible via .amount', () => {
+			const highPrecision1 = new Money(12.2345);
+			const highPrecision2 = new Money(12.2454);
+
 			assert.strictEqual(originalAmount.add(discountAmount).amount, 32.375);
+			assert.strictEqual(highPrecision1.add(highPrecision2).amount, 24.4799);
 		});
 
 		it('should allow you to a add non-Money object to a Money object', () => {
@@ -70,7 +74,11 @@ describe('Money', () => {
 		});
 
 		it('should retain the full, non-rounded amount accessible via .amount', () => {
+			const highPrecision1 = new Money(24.4799);
+			const highPrecision2 = new Money(12.2454);
+
 			assert.strictEqual(originalAmount.subtract(discountAmount).amount, 19.425);
+			assert.strictEqual(highPrecision1.subtract(highPrecision2).amount, 12.2345);
 		});
 
 		it('should allow you to a subtract non-Money object from a Money object', () => {
@@ -86,6 +94,7 @@ describe('Money', () => {
 
 		it('should retain the full, non-rounded amount accessible via .amount', () => {
 			assert.strictEqual(originalAmount.multiply(discountAmount).amount, 167.7025);
+			assert.strictEqual(originalAmount.multiply(0.75).amount, 19.425);
 		});
 
 		it('should allow you to a multiply non-Money object to a Money object', () => {

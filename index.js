@@ -22,11 +22,13 @@
 })(/* istanbul ignore next */ typeof self !== 'undefined' ? self : this, function(
 	mathUtils
 ) {
+	const maxExponent = 6;
+
 	function Money(amount) {
 		const floatAmount = parseFloat(amount);
 
 		if (isNaN(floatAmount)) {
-			throw new Error('Your amount could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.');
+			throw new Error(`Your amount ${amount} could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.`);
 		}
 
 		this.amount = floatAmount;
@@ -63,7 +65,10 @@
 			money = new Money(money);
 		}
 
-		return new Money((this.amount * 100 + money.amount * 100) / 100);
+		const { exponentToConvertToInteger, integers } = getNormalizedIntegerValues([this.amount, money.amount]);
+		const [thisAmount, thatAmount] = integers;
+
+		return new Money((thisAmount + thatAmount) + `e-${exponentToConvertToInteger}`);
 	}
 
 	/**
@@ -77,7 +82,10 @@
 			money = new Money(money);
 		}
 
-		return new Money((this.amount * 100 - money.amount * 100) / 100);
+		const { exponentToConvertToInteger, integers } = getNormalizedIntegerValues([this.amount, money.amount]);
+		const [thisAmount, thatAmount] = integers;
+
+		return new Money((thisAmount - thatAmount) + `e-${exponentToConvertToInteger}`);
 	}
 
 	/**
@@ -91,7 +99,10 @@
 			money = new Money(money);
 		}
 
-		return new Money(((this.amount * 100) * (money.amount * 100)) / 10000);
+		const { exponentToConvertToInteger, integers } = getNormalizedIntegerValues([this.amount, money.amount]);
+		const [thisAmount, thatAmount] = integers;
+
+		return new Money((thisAmount * thatAmount) + `e-${exponentToConvertToInteger * 2}`);
 	}
 
 	/**
@@ -116,6 +127,24 @@
 		const amountToSubtract = mathUtils.calculatePercent(this.amount, percent);
 
 		return this.subtract(amountToSubtract);
+	}
+
+	/**
+	 * @description Given an array of numbers, return an object with the numbers as integers and the exponent needed to convert them both to integers.
+	 * @param {array} numbers - An array of numbers to be converted to integers.
+	 * @return {object} The exponent needed to convert the numbers to integers and the integers themselves.
+	 */
+	function getNormalizedIntegerValues(numbers) {
+		const exponentToConvertToInteger = Math.min(
+			Math.max(...numbers.map(number => mathUtils.getNumberOfDecimalPlaces(number))),
+			maxExponent
+		);
+		const integers = numbers.map(number => Math.round(number + `e${exponentToConvertToInteger}`));
+
+		return {
+			exponentToConvertToInteger,
+			integers
+		};
 	}
 
 	return Money;
