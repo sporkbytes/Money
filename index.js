@@ -65,10 +65,14 @@
 			money = new Money(money);
 		}
 
-		const { exponentToConvertToInteger, integers } = getNormalizedIntegerValues([this.amount, money.amount]);
-		const [thisAmount, thatAmount] = integers;
+		const [thisAmount, thatAmount] = getNormalizedIntegerValues([this.amount, money.amount]);
+		const sum = thisAmount + thatAmount;
 
-		return new Money((thisAmount + thatAmount) + `e-${exponentToConvertToInteger}`);
+		if (sum < Number.MAX_SAFE_INTEGER && sum > Number.MIN_SAFE_INTEGER) {
+			return new Money((sum) + `e-${maxExponent}`);
+		}
+
+		throw new Error('Your numbers are too big to calculate safely.');
 	}
 
 	/**
@@ -82,10 +86,9 @@
 			money = new Money(money);
 		}
 
-		const { exponentToConvertToInteger, integers } = getNormalizedIntegerValues([this.amount, money.amount]);
-		const [thisAmount, thatAmount] = integers;
+		const [thisAmount, thatAmount] = getNormalizedIntegerValues([this.amount, money.amount]);
 
-		return new Money((thisAmount - thatAmount) + `e-${exponentToConvertToInteger}`);
+		return new Money((thisAmount - thatAmount) + `e-${maxExponent}`);
 	}
 
 	/**
@@ -99,10 +102,9 @@
 			money = new Money(money);
 		}
 
-		const { exponentToConvertToInteger, integers } = getNormalizedIntegerValues([this.amount, money.amount]);
-		const [thisAmount, thatAmount] = integers;
+		const [thisAmount, thatAmount] = getNormalizedIntegerValues([this.amount, money.amount]);
 
-		return new Money((thisAmount * thatAmount) + `e-${exponentToConvertToInteger * 2}`);
+		return new Money((thisAmount * thatAmount) + `e-${maxExponent * 2}`);
 	}
 
 	/**
@@ -135,16 +137,7 @@
 	 * @return {object} The exponent needed to convert the numbers to integers and the integers themselves.
 	 */
 	function getNormalizedIntegerValues(numbers) {
-		const exponentToConvertToInteger = Math.min(
-			Math.max(...numbers.map(number => mathUtils.getNumberOfDecimalPlaces(number))),
-			maxExponent
-		);
-		const integers = numbers.map(number => Math.round(number + `e${exponentToConvertToInteger}`));
-
-		return {
-			exponentToConvertToInteger,
-			integers
-		};
+		return numbers.map(number => Math.round(number + `e${maxExponent}`));
 	}
 
 	return Money;

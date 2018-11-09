@@ -60,6 +60,7 @@ describe('Money', () => {
 
 			assert.strictEqual(originalAmount.add(discountAmount).amount, 32.375);
 			assert.strictEqual(highPrecision1.add(highPrecision2).amount, 24.4799);
+			expect(() => new Money(9007199256).add(1)).to.throw('Your numbers are too big to calculate safely.');
 		});
 
 		it('should allow you to a add non-Money object to a Money object', () => {
