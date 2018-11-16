@@ -132,9 +132,9 @@
 	}
 
 	/**
-	 * @description Given an array of numbers, return an object with the numbers as integers and the exponent needed to convert them both to integers.
+	 * @description Given an array of numbers, return an object with the numbers represented as integers.
 	 * @param {array} numbers - An array of numbers to be converted to integers.
-	 * @return {object} The exponent needed to convert the numbers to integers and the integers themselves.
+	 * @return {array} The array of numbers converted to integers.
 	 */
 	function getNormalizedIntegerValues(numbers) {
 		return numbers.map(number => Math.round(number + `e${maxExponent}`));
