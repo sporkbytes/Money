@@ -23,12 +23,16 @@
 	mathUtils
 ) {
 	const maxExponent = 6;
+	const errors = {
+		cannotParse: `Your amount could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.`,
+		numberTooBig: 'Your numbers are too big to calculate safely.'
+	};
 
 	function Money(amount) {
 		const floatAmount = parseFloat(amount);
 
 		if (isNaN(floatAmount)) {
-			throw new Error(`Your amount ${amount} could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.`);
+			throw new Error(errors.cannotParse);
 		}
 
 		this.amount = floatAmount;
@@ -68,11 +72,11 @@
 		const [thisAmount, thatAmount] = getNormalizedIntegerValues([this.amount, money.amount]);
 		const sum = thisAmount + thatAmount;
 
-		if (sum < Number.MAX_SAFE_INTEGER && sum > Number.MIN_SAFE_INTEGER) {
-			return new Money((sum) + `e-${maxExponent}`);
+		if (!numberInSafeIntegerRange(sum)) {
+			throw new Error(errors.numberTooBig);
 		}
 
-		throw new Error('Your numbers are too big to calculate safely.');
+		return new Money((sum) + `e-${maxExponent}`);
 	}
 
 	/**
@@ -89,11 +93,11 @@
 		const [thisAmount, thatAmount] = getNormalizedIntegerValues([this.amount, money.amount]);
 		const difference = thisAmount - thatAmount;
 
-		if (difference < Number.MAX_SAFE_INTEGER && difference > Number.MIN_SAFE_INTEGER) {
-			return new Money((difference) + `e-${maxExponent}`);
+		if (!numberInSafeIntegerRange(difference)) {
+			throw new Error(errors.numberTooBig);
 		}
 
-		throw new Error('Your numbers are too big to calculate safely.');
+		return new Money((difference) + `e-${maxExponent}`);
 	}
 
 	/**
@@ -110,11 +114,11 @@
 		const [thisAmount, thatAmount] = getNormalizedIntegerValues([this.amount, money.amount]);
 		const product = thisAmount * thatAmount;
 
-		if (product < Number.MAX_SAFE_INTEGER && product > Number.MIN_SAFE_INTEGER) {
-			return new Money((product) + `e-${maxExponent * 2}`);
+		if (!numberInSafeIntegerRange(product)) {
+			throw new Error(errors.numberTooBig);
 		}
 
-		throw new Error('Your numbers are too big to calculate safely.');
+		return new Money((product) + `e-${maxExponent * 2}`);
 	}
 
 	/**
@@ -142,12 +146,21 @@
 	}
 
 	/**
-	 * @description Given an array of numbers, return an object with the numbers represented as integers.
+	 * @description Given an array of numbers, return an array with the numbers represented as integers.
 	 * @param {array} numbers - An array of numbers to be converted to integers.
 	 * @return {array} The array of numbers converted to integers.
 	 */
 	function getNormalizedIntegerValues(numbers) {
 		return numbers.map(number => Math.round(number + `e${maxExponent}`));
+	}
+
+	/**
+	 * @description Checks whether the given number is in the range of safe integers.
+	 * @param {number} number - The number to check.
+	 * @return {boolean} Whether the given number is in the range of safe integers.
+	 */
+	function numberInSafeIntegerRange(number) {
+		return number < Number.MAX_SAFE_INTEGER && number > Number.MIN_SAFE_INTEGER;
 	}
 
 	return Money;

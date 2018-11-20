@@ -20,7 +20,7 @@ describe('Money', () => {
 		});
 
 		it('should throw an error if the value passed to the constructor could not be parsed as a floating point number', () => {
-			expect(() => new Money('randomString')).to.throw('Your amount randomString could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.');
+			expect(() => new Money('randomString')).to.throw('Your amount could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.');
 		});
 	});
 
