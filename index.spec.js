@@ -55,7 +55,12 @@ describe('Money', () => {
 		});
 
 		it('should retain the full, non-rounded amount accessible via .amount', () => {
+			const highPrecision1 = new Money(12.2345);
+			const highPrecision2 = new Money(12.2454);
+
 			assert.strictEqual(originalAmount.add(discountAmount).amount, 32.375);
+			assert.strictEqual(highPrecision1.add(highPrecision2).amount, 24.4799);
+			expect(() => new Money(9007199256).add(1)).to.throw('Your numbers are too big to calculate safely.');
 		});
 
 		it('should allow you to a add non-Money object to a Money object', () => {
@@ -70,7 +75,12 @@ describe('Money', () => {
 		});
 
 		it('should retain the full, non-rounded amount accessible via .amount', () => {
+			const highPrecision1 = new Money(24.4799);
+			const highPrecision2 = new Money(12.2454);
+
 			assert.strictEqual(originalAmount.subtract(discountAmount).amount, 19.425);
+			assert.strictEqual(highPrecision1.subtract(highPrecision2).amount, 12.2345);
+			expect(() => new Money(9007199258).subtract(1)).to.throw('Your numbers are too big to calculate safely.');
 		});
 
 		it('should allow you to a subtract non-Money object from a Money object', () => {
@@ -86,6 +96,8 @@ describe('Money', () => {
 
 		it('should retain the full, non-rounded amount accessible via .amount', () => {
 			assert.strictEqual(originalAmount.multiply(discountAmount).amount, 167.7025);
+			assert.strictEqual(originalAmount.multiply(0.75).amount, 19.425);
+			expect(() => new Money(4503599629).multiply(2)).to.throw('Your numbers are too big to calculate safely.');
 		});
 
 		it('should allow you to a multiply non-Money object to a Money object', () => {

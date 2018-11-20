@@ -22,11 +22,17 @@
 })(/* istanbul ignore next */ typeof self !== 'undefined' ? self : this, function(
 	mathUtils
 ) {
+	const maxExponent = 6;
+	const errors = {
+		cannotParse: `Your amount could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.`,
+		numberTooBig: 'Your numbers are too big to calculate safely.'
+	};
+
 	function Money(amount) {
 		const floatAmount = parseFloat(amount);
 
 		if (isNaN(floatAmount)) {
-			throw new Error('Your amount could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.');
+			throw new Error(errors.cannotParse);
 		}
 
 		this.amount = floatAmount;
@@ -63,7 +69,14 @@
 			money = new Money(money);
 		}
 
-		return new Money((this.amount * 100 + money.amount * 100) / 100);
+		const [thisAmount, thatAmount] = getNormalizedIntegerValues([this.amount, money.amount]);
+		const sum = thisAmount + thatAmount;
+
+		if (!numberInSafeIntegerRange(sum)) {
+			throw new Error(errors.numberTooBig);
+		}
+
+		return new Money((sum) + `e-${maxExponent}`);
 	}
 
 	/**
@@ -77,7 +90,14 @@
 			money = new Money(money);
 		}
 
-		return new Money((this.amount * 100 - money.amount * 100) / 100);
+		const [thisAmount, thatAmount] = getNormalizedIntegerValues([this.amount, money.amount]);
+		const difference = thisAmount - thatAmount;
+
+		if (!numberInSafeIntegerRange(difference)) {
+			throw new Error(errors.numberTooBig);
+		}
+
+		return new Money((difference) + `e-${maxExponent}`);
 	}
 
 	/**
@@ -91,7 +111,14 @@
 			money = new Money(money);
 		}
 
-		return new Money(((this.amount * 100) * (money.amount * 100)) / 10000);
+		const [thisAmount, thatAmount] = getNormalizedIntegerValues([this.amount, money.amount]);
+		const product = thisAmount * thatAmount;
+
+		if (!numberInSafeIntegerRange(product)) {
+			throw new Error(errors.numberTooBig);
+		}
+
+		return new Money((product) + `e-${maxExponent * 2}`);
 	}
 
 	/**
@@ -116,6 +143,24 @@
 		const amountToSubtract = mathUtils.calculatePercent(this.amount, percent);
 
 		return this.subtract(amountToSubtract);
+	}
+
+	/**
+	 * @description Given an array of numbers, return an array with the numbers represented as integers.
+	 * @param {array} numbers - An array of numbers to be converted to integers.
+	 * @return {array} The array of numbers converted to integers.
+	 */
+	function getNormalizedIntegerValues(numbers) {
+		return numbers.map(number => Math.round(number + `e${maxExponent}`));
+	}
+
+	/**
+	 * @description Checks whether the given number is in the range of safe integers.
+	 * @param {number} number - The number to check.
+	 * @return {boolean} Whether the given number is in the range of safe integers.
+	 */
+	function numberInSafeIntegerRange(number) {
+		return number < Number.MAX_SAFE_INTEGER && number > Number.MIN_SAFE_INTEGER;
 	}
 
 	return Money;
