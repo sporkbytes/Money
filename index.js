@@ -87,8 +87,13 @@
 		}
 
 		const [thisAmount, thatAmount] = getNormalizedIntegerValues([this.amount, money.amount]);
+		const difference = thisAmount - thatAmount;
 
-		return new Money((thisAmount - thatAmount) + `e-${maxExponent}`);
+		if (difference < Number.MAX_SAFE_INTEGER && difference > Number.MIN_SAFE_INTEGER) {
+			return new Money((difference) + `e-${maxExponent}`);
+		}
+
+		throw new Error('Your numbers are too big to calculate safely.');
 	}
 
 	/**
@@ -103,8 +108,13 @@
 		}
 
 		const [thisAmount, thatAmount] = getNormalizedIntegerValues([this.amount, money.amount]);
+		const product = thisAmount * thatAmount;
 
-		return new Money((thisAmount * thatAmount) + `e-${maxExponent * 2}`);
+		if (product < Number.MAX_SAFE_INTEGER && product > Number.MIN_SAFE_INTEGER) {
+			return new Money((product) + `e-${maxExponent * 2}`);
+		}
+
+		throw new Error('Your numbers are too big to calculate safely.');
 	}
 
 	/**
