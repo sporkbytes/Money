@@ -24,7 +24,7 @@
   "homepage": "https://github.com/sporkbytes/Money#readme",
   "devDependencies": {
     "jest": "^24.8.0",
-    "jsdoc": "^3.5.5"
+    "jsdoc": "^3.6.2"
   },
   "dependencies": {
     "@sporkbytes/math-utils": "^1.0.0"
