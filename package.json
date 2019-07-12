@@ -1,6 +1,6 @@
 {
   "name": "@sporkbytes/money",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Money datatype to properly handle calculations and avoid floating point errors.",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "jsdoc": "^3.6.2"
   },
   "dependencies": {
-    "@sporkbytes/math-utils": "^1.0.0"
+    "@sporkbytes/math-utils": "^1.1.1"
   },
   "jest": {
     "collectCoverage": true,
