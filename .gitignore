@@ -9,3 +9,6 @@ node_modules/
 # Documentation
 coverage
 docs
+
+# Compiled code
+dist
