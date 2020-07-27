@@ -17,9 +17,9 @@ describe('Money', () => {
 		});
 
 		it('should throw an error if the value passed to the constructor could not be parsed as a floating point number', () => {
-			expect(() => new Money('randomString')).toThrow(
-				'Your amount could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.'
-			);
+			expect(
+				() => new Money('randomString')
+			).toThrowErrorMatchingSnapshot();
 		});
 	});
 
@@ -59,13 +59,16 @@ describe('Money', () => {
 
 			expect(originalAmount.add(discountAmount).amount).toBe(32.375);
 			expect(highPrecision1.add(highPrecision2).amount).toBe(24.4799);
-			expect(() => new Money(9007199256).add(1)).toThrow(
-				'Your numbers are too big to calculate safely.'
-			);
 		});
 
 		it('should allow you to a add non-Money object to a Money object', () => {
 			expect(+tenCents.add(0.2)).toBe(0.3);
+		});
+
+		it('should throw an error if your numbers are too big', () => {
+			expect(() =>
+				new Money(9007199256).add(1)
+			).toThrowErrorMatchingSnapshot();
 		});
 	});
 
@@ -83,13 +86,16 @@ describe('Money', () => {
 			expect(highPrecision1.subtract(highPrecision2).amount).toBe(
 				12.2345
 			);
-			expect(() => new Money(9007199258).subtract(1)).toThrow(
-				'Your numbers are too big to calculate safely.'
-			);
 		});
 
 		it('should allow you to a subtract non-Money object from a Money object', () => {
 			expect(+new Money(0.2).subtract(0.1)).toBe(0.1);
+		});
+
+		it('should throw an error if your numbers are too big', () => {
+			expect(() =>
+				new Money(9007199258).subtract(1)
+			).toThrowErrorMatchingSnapshot();
 		});
 	});
 
@@ -104,13 +110,16 @@ describe('Money', () => {
 				167.7025
 			);
 			expect(originalAmount.multiply(0.75).amount).toBe(19.425);
-			expect(() => new Money(4503599629).multiply(2)).toThrow(
-				'Your numbers are too big to calculate safely.'
-			);
 		});
 
 		it('should allow you to a multiply non-Money object to a Money object', () => {
 			expect(+tenCents.multiply(0.2)).toBe(0.02);
+		});
+
+		it('should throw an error if your numbers are too big', () => {
+			expect(() =>
+				new Money(4503599629).multiply(2)
+			).toThrowErrorMatchingSnapshot();
 		});
 	});
 
