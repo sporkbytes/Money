@@ -1,16 +1,16 @@
 import { calculatePercent, roundNumberToDigits } from '@sporkbytes/math-utils';
 
-/**
- * A Money datatype to properly handle calculations and avoid floating point errors.
- * @module Money
- */
-
 const maxExponent = 6;
 const errors = {
 	cannotParse: `Your amount could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.`,
 	numberTooBig: 'Your numbers are too big to calculate safely.',
 };
 
+/**
+ * A Money datatype to properly handle calculations and avoid floating point errors.
+ * @class
+ * @param {number} amount - The amount of money to be represented by the Money object.  This can be a number or a string that can be parsed into a floating point number.
+ */
 function Money(amount) {
 	const floatAmount = parseFloat(amount);
 
@@ -132,6 +132,7 @@ Money.prototype.subtractPercent = function (percent) {
 
 /**
  * @description Given an array of numbers, return an array with the numbers represented as integers.
+ * @private
  * @param {array} numbers - An array of numbers to be converted to integers.
  * @return {array} The array of numbers converted to integers.
  */
@@ -141,6 +142,7 @@ function getNormalizedIntegerValues(numbers) {
 
 /**
  * @description Checks whether the given number is in the range of safe integers.
+ * @private
  * @param {number} number - The number to check.
  * @return {boolean} Whether the given number is in the range of safe integers.
  */
