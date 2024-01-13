@@ -1,6 +1,6 @@
 {
   "name": "@sporkbytes/money",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A Money datatype to properly handle calculations and avoid floating point errors.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
