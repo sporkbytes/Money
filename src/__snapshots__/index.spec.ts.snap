@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Money > add > should throw an error if your numbers are too big 1`] = `[Error: Your numbers are too big to calculate safely.]`;
+
+exports[`Money > constructor > should throw an error if the value passed to the constructor could not be parsed as a floating point number 1`] = `[Error: Your amount could not be parsed into a floating point number. Please pass an amount that can be parsed as a float.]`;
+
+exports[`Money > multiply > should throw an error if your numbers are too big 1`] = `[Error: Your numbers are too big to calculate safely.]`;
+
+exports[`Money > subtract > should throw an error if your numbers are too big 1`] = `[Error: Your numbers are too big to calculate safely.]`;
